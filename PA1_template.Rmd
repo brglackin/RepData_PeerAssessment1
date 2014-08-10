@@ -3,10 +3,20 @@
 
 ## Loading and preprocessing the data
 
-
+```{r echo = TRUE}
+data<-read.csv("data/activity.csv")
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r echo = TRUE}
+totalStepsByDate<-aggregate(steps ~ date, data, sum,na.rm=T)
+hist(totalStepsByDate$steps)
+
+mean(totalStepsByDate$steps, na.rm=T)
+median(totalStepsByDate$steps, na.rm=T)
+
+```
 
 
 ## What is the average daily activity pattern?
