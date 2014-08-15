@@ -4,6 +4,7 @@
 ## Loading and preprocessing the data
 
 ```{r echo = TRUE}
+setwd("~/GitHub/RepData_PeerAssessment1")
 data<-read.csv("data/activity.csv")
 ```
 
@@ -22,7 +23,7 @@ median(totalStepsByDate$steps, na.rm=T)
 ## What is the average daily activity pattern?
 ```{r echo = TRUE}
 meanStepsByInterval<-aggregate(steps ~ interval, data, mean,na.rm=T)
-plot(meanStepsByInterval$interval,meanStepsByInterval$steps)
+plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Steps/Day", main="Steps per Day Frequency")
 meanStepsByInterval[which.max( meanStepsByInterval[,2] ),]
 ```
 
@@ -38,7 +39,7 @@ for (i in 1:nrow(dataNoNAs))
   }
 }
 nrow(data[is.na(data$steps),])
-nrow(dataNoNAs[is.na(dataNoNas$steps),])
+nrow(dataNoNAs[is.na(dataNoNAs$steps),])
 
 totalStepsByDateNoNAs<-aggregate(steps ~ date, dataNoNAs, sum,na.rm=T)
 hist(totalStepsByDateNoNAs$steps)
@@ -49,23 +50,31 @@ median(totalStepsByDateNoNAs$steps, na.rm=T)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r echo = TRUE}
+weekendDays <-c("Saturday", "Sunday")
 dayType <-apply(dataNoNAs,1,function(row) 
   {
-    if(weekdays(as.Date(row[2],"%Y-%m-%d"))=="Sunday" ||
-         weekdays(as.Date(row[2],"%Y-%m-%d"))=="Saturday")
-      { "weekend" }
-   else
-      { "weekday" }
+    ifelse(weekdays(as.Date(row[2],"%Y-%m-%d")) %in% weekendDays, "weekend","weekday")
    })
-dataNoNAs<-data.frame(dataNoNAs,dayType)
-head(dataNoNAs)
+dataNoNAs<-data.frame(dataNoNAs,dayType=as.factor(dayType))
+#head(dataNoNAs)
+#head(dayType,3000)
 ```
 
 
 ```{r echo =TRUE}
-meanStepsByIntervalDayFactor<-aggregate(steps ~ interval+dayType, dataNoNAs, mean,na.rm=T)
-tst1<-meanStepsByIntervalDayFactor[meanStepsByIntervalDayFactor$dayType=="weekday",]
-tst2<-meanStepsByIntervalDayFactor[meanStepsByIntervalDayFactor$dayType=="weekend",]
-plot(tst1$interval,tst1$steps)
-plot(tst2$interval,tst2$steps)
+#meanStepsByIntervalDayFactor<-aggregate(steps ~ interval+dayType, dataNoNAs, mean,na.rm=T)
+#tst1<-meanStepsByIntervalDayFactor[meanStepsByIntervalDayFactor$dayType=="weekday",]
+#tst2<-meanStepsByIntervalDayFactor[meanStepsByIntervalDayFactor$dayType=="weekend",]
+#plot(tst1$interval,tst1$steps)
+#plot(tst2$interval,tst2$steps)
+
+library(lattice)
+aggregatedData <- aggregate(steps ~ interval+dayType, dataNoNAs, mean)
+#head(aggregatedData,3000)
+xyplot(steps~interval|dayType, aggregatedData,
+   type = "l",
+   main="Steps per Interval", 
+   ylab="Number of Steps", xlab="Interval",
+   layout=c(1,2))
+
 ```
