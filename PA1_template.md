@@ -2,7 +2,7 @@
 
 
 ## Loading and preprocessing the data
-We first change the working directory to the repository location and load our datafile.
+For this analysis, the dataset was downloaded and read into R.
 
 
 ```r
@@ -11,13 +11,13 @@ data<-read.csv("data/activity.csv")
 ```
 
 ## What is mean total number of steps taken per day?
-We can aggregate the data by date, getting the sum of the steps per day. For this, we ignore any blank/missing entries.
+To calculate the mean and median steps per day, the data was aggregated by date. For these calculations, blank/missing entries were ignored.
 
 
 ```r
 totalStepsByDate<-aggregate(steps ~ date, data, sum,na.rm=T)
 ```
-A histogram can be created from this by using the hist command as follows:
+A histogram was created from this by using the hist command as follows:
 
 
 ```r
@@ -27,7 +27,7 @@ hist(totalStepsByDate$steps, xlab = "Average Daily Steps Taken", ylab="Frequency
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
-In order to get the mean and median of this data, we can simply call the mean and median functions on the steps variable, respectively.
+In order to get the mean and median of steps taken by day, the mean and median functions respectively were executed on the aggregated steps variable.
 
 
 ```r
@@ -43,10 +43,10 @@ dataMean;dataMedian
 ```
 ## [1] 10765
 ```
-The mean number of steps per day is <b>10766</b> and the median number of steps per day is <b>10765</b>.
+The mean number of steps per day was found to be **10766** and the median number of steps per day was **10765**.
 
 ## What is the average daily activity pattern?
-We can aggregate the steps counts by interval over all days and plot the results:
+The steps counts by interval over all days were aggregated and the results were plotted:
 
 
 ```r
@@ -56,7 +56,7 @@ plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Interval Numb
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
-To find the interval withe the largest average steps count, we use the which.max function:
+To find the interval with the largest average steps count, the which.max function was used to retrieve its index in the data frame:
 
 
 ```r
@@ -69,10 +69,10 @@ largestMean
 ## 104      835 206.2
 ```
 
-The largest average number of steps is <b>206.2</b> which occurs in interval <b>835</b>.
+The largest average number of steps was **206.2**, occuring in interval **835**.
 
 ## Imputing missing values
-We first compute the number of rows with missing values:
+The number of rows with missing values was calculated:
 
 
 ```r
@@ -83,7 +83,7 @@ nrow(data) - sum(complete.cases(data))
 ## [1] 2304
 ```
 
-For each missing value, we use the average for that interval instead, applying this to a copy of the original dataset.
+For each missing value, the average for its corresponding interval was used instead, and assigned to a copy of the original dataset for further analysis.
 
 
 ```r
@@ -96,7 +96,7 @@ for (i in 1:nrow(dataNoNAs))
   }
 }
 ```
-We confirm that we no longer have any missing values:
+It was then confirmed that the resulting dataset did not have any missing values:
 
 ```r
 nrow(dataNoNAs[is.na(dataNoNAs$steps),])
@@ -106,7 +106,7 @@ nrow(dataNoNAs[is.na(dataNoNAs$steps),])
 ## [1] 0
 ```
 
-We aggregate the average steps counts by date and plot a histogram. 
+The average steps counts were aggregated by date and a histogram was plotted. 
 
 ```r
 totalStepsByDateNoNAs<-aggregate(steps ~ date, dataNoNAs, sum,na.rm=T)
@@ -116,7 +116,7 @@ hist(totalStepsByDateNoNAs$steps,xlab = "Average Daily Steps Taken", ylab="Frequ
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
-We calculate the mean and median of this modified data as before.
+The mean and median of this modified data was calculated as before.
 
 ```r
 mean(totalStepsByDateNoNAs$steps, na.rm=T)
@@ -135,7 +135,7 @@ median(totalStepsByDateNoNAs$steps, na.rm=T)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-We assign a factor variable to each record indicating whether the record represents a week day or weekend day, and create a new dataframe with the extra column added to the original dataset.
+A factor variable was assigned to each record indicating whether the record represents a week day or weekend day, and a new data frame was created with the extra column in addition to the original dataset.
 
 ```r
 weekendDays <-c("Saturday", "Sunday")
@@ -146,7 +146,7 @@ dayType <-apply(dataNoNAs,1,function(row)
 dataNoNAs<-data.frame(dataNoNAs,dayType=as.factor(dayType))
 ```
 
-We aggregate the data by interval and dayType, and plot the graph with the lattice package's xyplot command.
+This data was aggregated by interval and dayType, and a graph comparing the averages by interval for each of the dayType factor values was plotted with the lattice package's xyplot command.
 
 
 ```r
@@ -161,3 +161,5 @@ xyplot(steps~interval|dayType, aggregatedData,
 ```
 
 ![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
+
+It was noted form the graph that a single maximum spike was seen in the steps for weekdays, but that there was a  relatively more constant amount of steps over a wider range of intervals for weekend days.
