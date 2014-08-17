@@ -51,7 +51,8 @@ The steps counts by interval over all days were aggregated and the results were 
 
 ```r
 meanStepsByInterval<-aggregate(steps ~ interval, data, mean,na.rm=T)
-plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Interval Number",ylab = "Average Steps", main="Average Steps per Interval for all Days")
+plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Interval Number",ylab = "Average Steps", 
+     main="Average Steps per Interval for all Days")
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 

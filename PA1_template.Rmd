@@ -36,7 +36,8 @@ The steps counts by interval over all days were aggregated and the results were 
 
 ```{r echo = TRUE}
 meanStepsByInterval<-aggregate(steps ~ interval, data, mean,na.rm=T)
-plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Interval Number",ylab = "Average Steps", main="Average Steps per Interval for all Days")
+plot(meanStepsByInterval$interval,meanStepsByInterval$steps, xlab="Interval Number",ylab = "Average Steps", 
+     main="Average Steps per Interval for all Days")
 ```
 
 To find the interval with the largest average steps count, the which.max function was used to retrieve its index in the data frame:
